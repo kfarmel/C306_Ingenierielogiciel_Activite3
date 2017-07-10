@@ -7,16 +7,30 @@ package com.m1.miage.sudoku.jeux;
  * @version 1.0
  */
 public class GrilleImpl implements Grille {
+	
+	/**
+	 * Caractere de case vide
+	 */
+	public static final char EMPTY = '@';
 
 	/**
-	 * ligne.
+	 * Caractere possible a mettre dans la grille
+	 * 
+	 * pour une grille 9x9 : 1..9
+	 * 
+	 * pour une grille 16x16: 0..9-a..f
 	 */
-	private final int lig = 9;
+	protected static final char[] tab_possible = new char[] { '1', '2', '3', '4', '5', '6','7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	/**
-	 * colonne.
+	 * LIGNEne.
 	 */
-	private final int col = 9;
+	private static final int LIGNE = 9;
+
+	/**
+	 * COLONEonne.
+	 */
+	private static final int COLONE = 9;
 
 	/**
 	 * grille.
@@ -28,32 +42,34 @@ public class GrilleImpl implements Grille {
 	 * verrous.
 	 **/
 	public GrilleImpl() {
+		
 		/**
 		 * creer la grille.
 		 */
-		grille = new char[lig][col];
-		for (int i = 0; i < lig; ++i) {
-			for (int j = 0; j < col; ++j) {
-				grille[i][j] = Grille.possible[j];
+		grille = new char[LIGNE][COLONE];
+		for (int i = 0; i < LIGNE; ++i) {
+			for (int j = 0; j < COLONE; ++j) {
+				grille[i][j] = tab_possible[j];
 			}
 		}
+		
 	}
 
 	/**
 	 * checkGrille.
 	 * 
 	 * @param a
-	 *            ligne
+	 *            LIGNEne
 	 * @param b
-	 *            colonne
+	 *            COLONEonne
 	 */
 	private void checkGrille(final int a, final int b) {
 
-		if (a < 0 || a > this.lig) {
+		if (a < 0 || a > LIGNE) {
 			throw new IllegalArgumentException();
 		}
 
-		if (b < 0 || b > this.col) {
+		if (b < 0 || b > COLONE) {
 			throw new IllegalArgumentException();
 		}
 
@@ -63,9 +79,9 @@ public class GrilleImpl implements Grille {
 	 * checkGrille.
 	 * 
 	 * @param x
-	 *            ligne
+	 *            LIGNEne
 	 * @param y
-	 *            colonne
+	 *            COLONEonne
 	 * @param v
 	 *            valeur
 	 * @return si insertion possible
@@ -82,14 +98,13 @@ public class GrilleImpl implements Grille {
 		 */
 		boolean trouv = false;
 		for (int i = 0; i < x; ++i) {
-			if (v == Grille.possible[i] || v == Grille.EMPTY) {
+			if (v == tab_possible[i] || v == EMPTY) {
 				trouv = true;
 			}
 		}
-		if (!trouv) {
-			throw new IllegalArgumentException();
-		}
-		return true;
+		
+		return trouv;
+	
 	}
 
 	/**
@@ -101,13 +116,14 @@ public class GrilleImpl implements Grille {
 		/**
 		 * check complete.
 		 */
-		for (int i = 0; i < lig; ++i) {
-			for (int j = 0; j < col; ++j) {
-				if (Grille.EMPTY == grille[i][j]) {
+		for (int i = 0; i < LIGNE; ++i) {
+			for (int j = 0; j < COLONE; ++j) {
+				if (EMPTY == grille[i][j]) {
 					return false;
 				}
 			}
 		}
+		
 		return true;
 	}
 
@@ -116,7 +132,7 @@ public class GrilleImpl implements Grille {
 	 */
 	public int getDimension() {
 		// value
-		return this.lig / this.col;
+		return LIGNE / COLONE;
 	}
 
 	/**
@@ -127,11 +143,8 @@ public class GrilleImpl implements Grille {
 	 * @param y
 	 *            position y dans la grille
 	 * @return valeur dans la case x,y
-	 * @throws IllegalArgumentException
-	 *             si x ou y sont hors bornes (0-8)
 	 */
-	public char getValue(final int x, final int y)
-			throws IllegalArgumentException {
+	public char getValue(final int x, final int y) {
 
 		/**
 		 * control Grille
@@ -155,20 +168,15 @@ public class GrilleImpl implements Grille {
 	 *            position y dans la grille
 	 * @param value
 	 *            valeur a mettre dans la case
-	 * @throws IllegalArgumentException
-	 *             si x ou y sont hors bornes (0-8)
-	 * @throws IllegalArgumentException
-	 *             si value n'est pas un caractere autorise ('1',...,'9',..)
 	 * @return reponse si c'est possible
 	 */
-	public boolean possible(final int x, final int y, final char value)
-			throws IllegalArgumentException {
+	public boolean possible(final int x, final int y, final char value){
 		/**
 		 * checkGrille
 		 */
 		return checkGrille(x, y, value);
 	}
-
+	
 	/**
 	 * Affecte une valeur dans la grille.
 	 * 
@@ -178,16 +186,8 @@ public class GrilleImpl implements Grille {
 	 *            position y dans la grille
 	 * @param value
 	 *            valeur a mettre dans la case
-	 * @throws IllegalArgumentException
-	 *             si x ou y sont hors bornes (0-8)
-	 * @throws IllegalArgumentException
-	 *             si la valeur est interdite aux vues des autres valeurs de la
-	 *             grille
-	 * @throws IllegalArgumentException
-	 *             si value n'est pas un caractere autorise ('1',...,'9')
 	 */
-	public void setValue(final int x, final int y, final char value)
-			throws IllegalArgumentException {
+	public void setValue(final int x, final int y, final char value){
 
 		/**
 		 * checkGrille
@@ -200,5 +200,7 @@ public class GrilleImpl implements Grille {
 		grille[x][y] = value;
 
 	}
+
+	
 
 }

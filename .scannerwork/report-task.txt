@@ -1,0 +1,6 @@
+projectKey=Activite3
+serverUrl=http://localhost:9000
+serverVersion=6.4.0.25310
+dashboardUrl=http://localhost:9000/dashboard/index/Activite3
+ceTaskId=AV0rY7xXZwF2UMqBy_Eh
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AV0rY7xXZwF2UMqBy_Eh
